@@ -1,0 +1,58 @@
+{
+  "path": "data/environment-seeds.zip",
+  "sha256": "1e3db45e030beb07cb1b313b4a9b0067888efbb3922867f27dbd72917c2e8b61",
+  "original_tar_sha256": "bfd0b2bc4e7ba5506dfaf994451ad375d7eaac01de531e9ae59bef44cdf7eb78",
+  "original_manifest_sha256": "e6c8850d9ec277a74f8e954d7d00079cb5160a22f2cb80b922de2b78b5a17ed4",
+  "manifest_sha256": "d25ea0712ff568a22074b2517b86e3a373500bf125c2ea80c32f0f5a9b263dd9",
+  "files": 40,
+  "alterations": [
+    {
+      "file": "MANIFEST.json",
+      "field": "source.integration_host",
+      "purpose": "anonymous host label and updated metadata-redaction inventory"
+    },
+    {
+      "file": "documentation/ranksplit-environment-seed-transfer-result-2026-08-08.md",
+      "field": "local path in prose",
+      "original_sha256": "dd62caab0f4be3a690150d6967a63eed063d987285ba792473a016b96847f6bb",
+      "released_sha256": "10292b979e70445f0d8bf5dd9e919585c6e8fa69217e7eb8db4d2b017dfac116",
+      "change": "local workspace prefix removed"
+    },
+    {
+      "file": "raw/2026-08-06-octo-base-ranksplit-environment-seed-transfer.json",
+      "field": "scenario_manifest",
+      "original_sha256": "dbe6f395b418343771d117c6f8e9715d3510e5774379e7f679ec19e7fd542001",
+      "released_sha256": "7d88cf9f1b365a851fef2cfe5f48093745f8df9e2f35917b6312e8d95615db88",
+      "change": "absolute local path to relative manifest path only"
+    },
+    {
+      "file": "raw/2026-08-06-octo-small-ranksplit-environment-seed-transfer.json",
+      "field": "scenario_manifest",
+      "original_sha256": "78a1cb89235ae1805544f0db401e850a11261b357e7d619c586997d0e0dbd4d0",
+      "released_sha256": "4d039de1c21aa4e4b13d34cd4aef1442fe8e68fc5461b7038a57ba261886c040",
+      "change": "absolute local path to relative manifest path only"
+    },
+    {
+      "file": "raw/2026-08-06-rt-1-x-ranksplit-environment-seed-transfer.json",
+      "field": "scenario_manifest",
+      "original_sha256": "1e9cba96fb76ec480e4b58cac2ee62f19c90acad7ebe6a1bdcbcb29dba1e940a",
+      "released_sha256": "cfa6ab0ba6e8c94daac19202a36448f52168d309b7c3ac731cf2d43c74db5582",
+      "change": "absolute local path to relative manifest path only"
+    },
+    {
+      "file": "raw/2026-08-08-rt-1-x-ranksplit-environment-seed-transfer-repaired.json",
+      "field": "scenario_manifest",
+      "original_sha256": "c38fad749781481f10dd4125d1389cda0d01460f934abe5f90b5f6c9a4f279d4",
+      "released_sha256": "09690cf5752c1da3d6790243d467ee8b9ba750476b7b15554ec45332892e5bc6",
+      "change": "absolute local path to relative manifest path only"
+    },
+    {
+      "file": "raw/2026-08-08-rt-1-x-ranksplit-environment-seed-transfer.integrity-fail-policy-seed-0.json",
+      "field": "scenario_manifest",
+      "original_sha256": "1e9cba96fb76ec480e4b58cac2ee62f19c90acad7ebe6a1bdcbcb29dba1e940a",
+      "released_sha256": "cfa6ab0ba6e8c94daac19202a36448f52168d309b7c3ac731cf2d43c74db5582",
+      "change": "absolute local path to relative manifest path only"
+    }
+  ],
+  "payload_files_byte_identical": 33
+}

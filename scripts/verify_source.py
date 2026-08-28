@@ -15,6 +15,9 @@ TEST_MODULES = (
     "tests.test_ranksplit_quickstart",
     "tests.test_ranksplit_source_imports",
     "tests.test_simulation_source",
+    "tests.test_paper_reproduction",
+    "tests.test_custom_simulation_tensor",
+    "tests.test_environment_seed_reproduction",
 )
 
 

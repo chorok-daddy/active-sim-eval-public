@@ -6,8 +6,8 @@ the code without reading project history first.
 
 ## 1. Prepare Python
 
-Use CPython 3.11.x. The preferred patch version is recorded in the repository
-root:
+Use CPython 3.11.x. The validated mechanism-study patch version is recorded in
+the repository root; later studies have a different validated runtime:
 
 ```bash
 cat .python-version
@@ -103,6 +103,15 @@ The historical Windows CPython 3.11.15 environment matches all 200 EIG traces
 and metric rows. A mismatch on another platform is reported, not silently
 normalized. This does not certify RankSplit's complete traces or the other
 studies. The current `--full` command covers the first comparison only.
+
+For all reported studies, including preference, ranking comparators and the
+separate seed analysis, follow [the full reproduction guide](REPRODUCTION.md).
+The shortest complete stored-reconstruction path is:
+
+```bash
+python3 scripts/reproduce_paper.py --mode stored
+python3 scripts/reproduce_environment_seeds.py --mode stored
+```
 
 ## 6. Optional simulator source
 

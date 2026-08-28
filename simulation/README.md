@@ -120,6 +120,21 @@ not replace them with the supplied results when they differ.
 
 ## Source-only checks
 
+To convert complete batches into a new tensor, first copy
+`mechanism-acquisition-spec.json` or `ranking-acquisition-spec.json` to your
+run directory **before acquisition**, setting the exact RT-1-X checkpoint
+path used by your server. Do not rewrite raw results to match an old path.
+
+```bash
+python3 simulation/build_tensor.py --study mechanism --acquisition-spec rerun/acquisition.json --small rerun/raw/small.json --base rerun/raw/base.json --rt1x rerun/raw/rt1x.json --output rerun/new-tensor.json
+python3 scripts/reproduce_paper.py --mode replay --study mechanism --custom-tensor rerun/new-tensor.json --workers 4 --output rerun/new-results
+```
+
+Use `ranking` and its specification for the independent comparator scenario
+set. Original raw-payload checks reject missing or inconsistent outcomes;
+custom replay derives its target from the new observations, never from paper
+expectations. See [the reproduction guide](../docs/REPRODUCTION.md).
+
 These commands require only the default CPU Python environment and do not
 start any simulator, policy process, or model download:
 

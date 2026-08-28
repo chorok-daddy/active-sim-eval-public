@@ -5,7 +5,7 @@ repository is organized for a reviewer who wants to go from a clean checkout
 to a verified CPU smoke run in a few minutes.
 
 > The public source release contains the reusable calculation modules, a
-> compact binary-outcome tensor, tests, and reviewer-facing verification
+> recorded binary-outcome tensors, tests, and reviewer-facing verification
 > commands. Optional original simulator integration source and scenario inputs
 > are provided separately; model weights and simulator environments are not
 > bundled.
@@ -54,9 +54,39 @@ python3 scripts/reproduce_results.py --full
 
 This existing smoke verifier uses a 2% relative tolerance and a `1e-8`
 absolute floor. Its PASS is not a strict trace or full-paper certification.
-The sensitivity study, second ranking-comparator comparison, and environment
-seed study are not yet covered by this command; `--full` means all repetitions
-of the first comparison, not all experiments in the paper.
+Here `--full` means all repetitions of the first comparison, not all
+experiments in the paper. Use the expanded paths below for stricter checks.
+
+## Reproduce the paper results
+
+No simulator or GPU is needed. First recompute summaries and paired intervals
+from the supplied per-repetition evidence:
+
+```bash
+python3 scripts/reproduce_paper.py --mode stored
+python3 scripts/reproduce_environment_seeds.py --mode stored
+```
+
+These cover the mechanism comparison, preference response, ranking comparators,
+and separate 12-environment-seed study. Stored reconstruction is distinguished
+from new execution. The seed command also rebuilds its tensor from original
+raw observations and independently reconstructs the complete original report.
+
+To execute the allocation algorithms again on recorded binary outcomes:
+
+```bash
+python3 scripts/reproduce_paper.py --mode replay --study mechanism --workers 4 --output rerun/mechanism
+python3 scripts/reproduce_paper.py --mode replay --study preference --workers 4 --output rerun/preference
+python3 scripts/reproduce_paper.py --mode replay --study ranking --workers 4 --output rerun/ranking
+python3 scripts/reproduce_environment_seeds.py --mode replay --workers 4 --output rerun/seeds
+```
+
+Each command saves progress and cases; repeat it with `--resume` after an
+interruption. Defaults execute every repetition through all primary paper
+budgets. Optional longer paths and validated numerical environments are in
+[the reproduction guide](docs/REPRODUCTION.md). Exact fresh replay has different
+validated runtimes for the mechanism and later studies; cross-platform
+near-tie differences are reported, not rounded away.
 
 An independent EIG runtime check compares all five metrics and the full
 allocation trace for each of 200 repetitions:
@@ -76,7 +106,7 @@ For the step-by-step reviewer path, see
 
 ## Requirements
 
-- CPython 3.11.15, recorded in [`.python-version`](.python-version)
+- CPython 3.11.x; see the study-specific runtime table in [the guide](docs/REPRODUCTION.md)
 - Python standard library only
 - A shell that can run the commands above
 
