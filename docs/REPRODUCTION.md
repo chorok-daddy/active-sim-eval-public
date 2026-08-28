@@ -12,7 +12,7 @@ python3 scripts/reproduce_paper.py --mode stored
 python3 scripts/reproduce_environment_seeds.py --mode stored
 ```
 
-The first command runs 46 tests and small executable examples. The next two
+The first command runs 47 tests and small executable examples. The next two
 recompute means and paired statistics from stored individual repetitions.
 Outputs are `rerun/paper/result.json` and
 `rerun/environment-seeds/result.json`. These are stored reconstructions,
@@ -150,6 +150,8 @@ reproduced every supplied scenario record exactly in the release check.
   Local host/path metadata was anonymized with original/released hashes
   recorded. All scientific source, tensor, replay and merged-result bytes
   remain unchanged, as do every raw observation and its scientific metadata.
+  Redacted `configs/manifests/...` paths are relative to the bundled `source/`
+  root, not to the release archive's root.
 
 Tests include analytic metric oracles, full-run/prefix agreement, forbidden
 expected-result access during allocation, altered outcomes, invalid raw

@@ -37,6 +37,16 @@ def case_identity():
             "runtime": core.runtime_identity()}
 
 
+def type_sensitive_equal(left, right):
+    if type(left) is not type(right):
+        return False
+    if isinstance(left,dict):
+        return left.keys() == right.keys() and all(type_sensitive_equal(v,right[k]) for k,v in left.items())
+    if isinstance(left,list):
+        return len(left) == len(right) and all(type_sensitive_equal(a,b) for a,b in zip(left,right))
+    return left == right
+
+
 def module(name, path):
     spec = importlib.util.spec_from_file_location(name, path)
     obj = importlib.util.module_from_spec(spec)
@@ -89,11 +99,13 @@ def stored(directory):
     changes = {r["file"]:r for r in provenance["alterations"] if "original_sha256" in r}
     # Anonymized raw metadata changes file hashes, not observations. Validate
     # both hash identities explicitly; never relabel rebuilt hashes as originals.
+    if set(rebuilt) != set(tensor) or set(rebuilt["source_sha256"]) != set(tensor["source_sha256"]) or set(tensor["source_sha256"]) != {*verifier.RAW_RELATIVES,"frozen_protocol","scenario_manifest"}:
+        raise ValueError("tensor schema/provenance key mismatch")
     for role, relative in verifier.RAW_RELATIVES.items():
         if tensor["source_sha256"][role] != changes[relative]["original_sha256"] or rebuilt["source_sha256"][role] != changes[relative]["released_sha256"]:
             raise ValueError("raw provenance identity mismatch")
     for key in tensor:
-        if key != "source_sha256" and rebuilt[key] != tensor[key]:
+        if key != "source_sha256" and not type_sensitive_equal(rebuilt[key],tensor[key]):
             raise ValueError("raw-to-tensor content comparison failed")
     for key in ("frozen_protocol", "scenario_manifest"):
         if rebuilt["source_sha256"][key] != tensor["source_sha256"][key]:

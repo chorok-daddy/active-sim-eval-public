@@ -21,7 +21,8 @@ payloads numerically unchanged; local host/path metadata was anonymized with
 both original and released hashes recorded. Its
 mixed scientific result (`PARTIAL`) and all comparators remain visible.
 Both historical raw-to-tensor conversions matched all scenario records.
-The expanded verifier runs 46 tests. No new GPU simulation was performed.
+The expanded verifier runs 47 tests, including changed-outcome rejection even
+when public raw-file hashes are updated. No new GPU simulation was performed.
 
 See [REPRODUCTION.md](REPRODUCTION.md) for commands and runtime details.
 Two EIG ranking-study Gap-MAE rows differ on Windows but match on Mac;

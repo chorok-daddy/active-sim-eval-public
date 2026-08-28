@@ -1,7 +1,9 @@
 import copy
+import json
 import tempfile
 from pathlib import Path
 import unittest
+from unittest import mock
 
 from scripts import reproduce_environment_seeds as seed
 from scripts import paper_reproduction as core
@@ -55,6 +57,38 @@ class EnvironmentSeedTests(unittest.TestCase):
         changed["identity"]["archive_sha256"] = "changed"
         with self.assertRaises(ValueError):
             seed.validate_case(changed,seed.case_identity(),100,0,96,protocol)
+
+    def test_changed_outcome_fails_even_when_public_raw_hash_is_updated(self):
+        with tempfile.TemporaryDirectory() as temp:
+            directory = seed.unpack(Path(temp)/"inputs")
+            verifier = seed.load(directory)[0]
+            relative = verifier.RAW_RELATIVES["octo-small"]
+            path = directory/relative
+            raw = json.loads(path.read_text())
+            raw["results"][0]["final_success"] = not raw["results"][0]["final_success"]
+            path.write_text(json.dumps(raw,indent=2)+"\n")
+            sha = core.digest(path.read_bytes())
+            manifest_path = directory/"MANIFEST.json"
+            manifest = json.loads(manifest_path.read_text())
+            for entry in manifest["files"]:
+                if entry["archive_path"] == relative:
+                    entry.update(sha256=sha,bytes=path.stat().st_size)
+            manifest_path.write_text(json.dumps(manifest,indent=2)+"\n")
+            provenance_path = seed.ROOT/"data/environment-seeds-provenance.json"
+            provenance = json.loads(provenance_path.read_text())
+            for entry in provenance["alterations"]:
+                if entry["file"] == relative:
+                    entry["released_sha256"] = sha
+            read = Path.read_text
+            def replaced(p,*args,**kwargs):
+                return json.dumps(provenance) if p == provenance_path else read(p,*args,**kwargs)
+            # The inventory and original verifier alone still pass. The added
+            # observation-content comparison must reject the changed bit.
+            self.assertEqual(verifier.verify_release(directory)["status"],"pass")
+            with mock.patch.object(Path,"read_text",replaced), self.assertRaisesRegex(ValueError,"content comparison"):
+                seed.stored(directory)
+        self.assertFalse(seed.type_sensitive_equal([1],[True]))
+        self.assertFalse(seed.type_sensitive_equal([1],[1.0]))
 
 
 if __name__ == "__main__":
