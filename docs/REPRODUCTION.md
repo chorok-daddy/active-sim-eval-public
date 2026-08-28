@@ -138,6 +138,13 @@ and reports `reference_comparison: not_applicable`; new outcomes need not
 equal the historical tensor. Conversion of all six original raw batches
 reproduced every supplied scenario record exactly in the release check.
 
+The same new mechanism tensor can also be passed to `--study preference` to
+run its `.50/.75` settings. In custom mode, these are new-data results without
+the historical EIG/.25 anchors; those settings are obtained separately from
+the mechanism run on the same new tensor. The independent 12-seed acquisition
+and its original raw-to-tensor-to-replay commands are described in
+[the environment-seed simulation guide](../simulation/ENVIRONMENT_SEEDS.md).
+
 ## Implementation and provenance
 
 - `scripts/fixed_preference.py`, `scripts/ranksplit.py`: reusable scores.

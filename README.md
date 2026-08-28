@@ -5,7 +5,7 @@ repository is organized for a reviewer who wants to go from a clean checkout
 to a verified CPU smoke run in a few minutes.
 
 > The public source release contains the reusable calculation modules, a
-> recorded binary-outcome tensors, tests, and reviewer-facing verification
+> set of recorded binary-outcome tensors, tests, and reviewer-facing verification
 > commands. Optional original simulator integration source and scenario inputs
 > are provided separately; model weights and simulator environments are not
 > bundled.

@@ -111,14 +111,17 @@ For Octo-base, change `--policy-name`, the output filename, and the server's
 checkpoint. For RT-1-X, use `--policy-name rt-1-x` and **omit** `--policy-seed`;
 RT-1-X does not expose per-episode policy-seed control. Never reuse an output
 filename across different policies or scenario sets. A complete two-set run
-contains 1,632 episodes, before any optional environment-seed analysis.
+contains 1,632 episodes. The [optional 12-seed study](ENVIRONMENT_SEEDS.md)
+adds 4,896 episodes, for 6,528 in total. The 200 analysis repetitions (and
+50 paths per environment seed) reuse these observations; they do not multiply
+the number of simulator episodes.
 
 Keep newly generated files under `rerun/`, separate from the supplied paper
 data. The original full-batch outputs include Boolean outcomes and scenario
 identities; the numerical reproduction path must use those observed outcomes,
 not replace them with the supplied results when they differ.
 
-## Source-only checks
+## Build a tensor from new outcomes
 
 To convert complete batches into a new tensor, first copy
 `mechanism-acquisition-spec.json` or `ranking-acquisition-spec.json` to your
@@ -134,6 +137,8 @@ Use `ranking` and its specification for the independent comparator scenario
 set. Original raw-payload checks reject missing or inconsistent outcomes;
 custom replay derives its target from the new observations, never from paper
 expectations. See [the reproduction guide](../docs/REPRODUCTION.md).
+
+## Source-only checks
 
 These commands require only the default CPU Python environment and do not
 start any simulator, policy process, or model download:
