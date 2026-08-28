@@ -327,12 +327,18 @@ class DownloadTests(unittest.TestCase):
                 self.assertFalse(target.exists())
 
     def test_zip_escape_and_symlinks_are_rejected(self):
-        for name in ("../outside",downloads.RT1_NAME+"/../outside",downloads.RT1_NAME+"/C:bad",downloads.RT1_NAME+"\\outside"):
-            with tempfile.TemporaryDirectory() as temp:
+        for name in ("../outside",downloads.RT1_NAME+"/../outside",downloads.RT1_NAME+"/C:bad",downloads.RT1_NAME+"\\outside",downloads.RT1_NAME+"/saved_model.pb\0hidden"):
+            with self.subTest(name=name), tempfile.TemporaryDirectory() as temp:
                 root=Path(temp)
                 archive=root/"test.zip"
+                # Preserve hostile bytes instead of letting ZipInfo sanitize the
+                # fixture itself on Windows before the extractor can inspect it.
+                member=zipfile.ZipInfo()
+                member.filename=member.orig_filename=name
                 with zipfile.ZipFile(archive,"w") as out:
-                    out.writestr(name,b"x")
+                    out.writestr(member,b"x")
+                with zipfile.ZipFile(archive) as check:
+                    self.assertEqual(check.infolist()[0].orig_filename,name)
                 with self.assertRaisesRegex(ValueError,"unsafe"):
                     downloads.extract_checkpoint(archive,root/"models")
                 self.assertFalse((root/"outside").exists())

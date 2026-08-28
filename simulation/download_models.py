@@ -94,8 +94,11 @@ def extract_directory_archive(archive_path, destination, expected_root=None, req
         seen, roots = set(), set()
         reserved = {"con", "prn", "aux", "nul", *[f"com{i}" for i in range(1, 10)], *[f"lpt{i}" for i in range(1, 10)]}
         for member in archive.infolist():
+            # ZipInfo normalizes backslashes on Windows and truncates NULs.
+            # Inspect the original archive name before trusting that normalization.
+            raw_name = member.orig_filename
             parts = PurePosixPath(member.filename).parts
-            if (not parts or parts[0] == "/" or ".." in parts or "\\" in member.filename
+            if (not parts or parts[0] == "/" or ".." in parts or "\\" in raw_name or "\0" in raw_name
                 or any(":" in p or p.endswith((".", " ")) for p in parts)
                 or any(p.split(".")[0].casefold() in reserved for p in parts)
                 or stat.S_ISLNK(member.external_attr >> 16)):

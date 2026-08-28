@@ -28,13 +28,13 @@ def run(command: list[str]) -> subprocess.CompletedProcess[str]:
         command,
         cwd=ROOT,
         text=True,
-        check=True,
         capture_output=True,
     )
     if completed.stdout:
         print(completed.stdout, end="")
     if completed.stderr:
         print(completed.stderr, end="", file=sys.stderr)
+    completed.check_returncode()
     return completed
 
 
