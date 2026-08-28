@@ -4,6 +4,9 @@ Extract the source ZIP and run commands from the directory containing
 `README.md`. Numerical reproduction uses only CPython 3.11 and its standard
 library. It does not download policies or run a simulator.
 
+This is Stage 1 (CPU) of the [two-stage guide](../README.md#two-stages-of-reproduction).
+For shell-specific commands, choose [Windows](WINDOWS.md) or [macOS](MACOS.md).
+
 ## Fast reconstruction of all reported studies
 
 ```bash
@@ -12,7 +15,7 @@ python3 scripts/reproduce_paper.py --mode stored
 python3 scripts/reproduce_environment_seeds.py --mode stored
 ```
 
-The first command runs 47 tests and small executable examples. The next two
+The first command runs the source tests and small executable examples. The next two
 recompute means and paired statistics from stored individual repetitions.
 Outputs are `rerun/paper/result.json` and
 `rerun/environment-seeds/result.json`. These are stored reconstructions,

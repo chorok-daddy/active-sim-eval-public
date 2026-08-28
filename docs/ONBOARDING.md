@@ -4,7 +4,14 @@ This page is the shortest path from a fresh checkout to a verified source
 run. It is intentionally separate from the paper so that a reviewer can use
 the code without reading project history first.
 
-## 1. Prepare Python
+There are two stages: **CPU paper-result reproduction**, followed only if
+desired by **new robot simulation**. Windows, macOS, and Linux can all start
+with the CPU path. Shell-specific commands are in [Windows](WINDOWS.md) and
+[macOS](MACOS.md); the examples below use macOS/Linux syntax.
+
+## Stage 1: reproduce the paper results (CPU)
+
+### Prepare Python
 
 Use CPython 3.11.x. The validated mechanism-study patch version is recorded in
 the repository root; later studies have a different validated runtime:
@@ -17,7 +24,7 @@ python3 --version
 The source path uses only the standard library. Do not create an environment
 or install packages for the default check.
 
-## 2. Run the one-command check
+### Run the one-command check
 
 From the repository root:
 
@@ -43,7 +50,7 @@ The example also prints a JSON object. The expected selection is
 `drawer/policy-2`. The result-tensor check is run separately so the example
 remains easy to inspect.
 
-## 3. Inspect the public API
+### Inspect the public API
 
 From the repository root:
 
@@ -67,7 +74,7 @@ The output is a finite numeric score and an
 or Python numerical behavior changes; the repository tests provide the
 supported invariants.
 
-## 4. Understand the source layout
+### Understand the source layout
 
 | Path | Purpose |
 | --- | --- |
@@ -80,7 +87,7 @@ supported invariants.
 | `tests/` | Numerical, scoring, import, and quickstart checks |
 | `scripts/verify_source.py` | Combined verification entry point |
 
-## 5. Reproduction boundary
+### Reconstruct all studies or execute fresh replay
 
 The public replay starts from already recorded binary outcomes; it does not
 download models or recreate simulator episodes. The default check verifies a
@@ -113,7 +120,7 @@ python3 scripts/reproduce_paper.py --mode stored
 python3 scripts/reproduce_environment_seeds.py --mode stored
 ```
 
-## 6. Optional simulator source
+## Stage 2: optionally generate new robot outcomes
 
 The original simulator client, Octo/RT-1-X policy servers, and both scenario
 sets are included under [`simulation/`](../simulation/README.md). This path is
@@ -121,7 +128,13 @@ for generating new robot outcomes with separately installed software and model
 weights. It is not run by `verify_source.py`; its source-only checks do not
 claim a new GPU rollout. Keep new outputs separate from the supplied data.
 
-## 7. If something fails
+The [setup helper](../simulation/SETUP.md) previews environment installation
+and public model/asset downloads before executing them. The recorded route
+uses native Windows rendering and WSL2/Linux NVIDIA policy inference; WSL
+alone is not a supported rendering environment. Native Linux integration
+requires separate end-to-end validation before it is labelled as verified.
+
+## If something fails
 
 1. Confirm that the command is being run from the repository root.
 2. Confirm Python 3.11.x with `python3 --version`.
@@ -134,7 +147,7 @@ claim a new GPU rollout. Keep new outputs separate from the supplied data.
 4. Record the Python version, operating system, command, and complete error
    output when reporting an issue.
 
-## 8. License and source use
+## License and source use
 
 The repository source is distributed under the MIT License in the root
 [`LICENSE`](../LICENSE) file. No third-party package, model weights, or

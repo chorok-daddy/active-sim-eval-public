@@ -10,12 +10,24 @@ to a verified CPU smoke run in a few minutes.
 > are provided separately; model weights and simulator environments are not
 > bundled.
 
-To generate new robot outcomes instead of using the supplied data, see
-[`simulation/README.md`](simulation/README.md). This optional GPU path is
-separate from the default CPU reproduction and has not been rerun for this
-source release.
+## Two stages of reproduction
 
-## Quick start
+1. **Reproduce the paper results on a CPU.** Use the supplied observations and
+   per-repetition evidence; no simulator, model download, or CUDA is required.
+2. **Optionally generate new robot outcomes.** Install the simulator and public
+   policies, run new trials, then analyze their outcomes with the same code.
+
+Stage 1 is the starting point for reviewing the paper. Stage 2 is independent
+and is not required to verify the supplied numerical evidence.
+
+## Stage 1: reproduce the paper results (CPU)
+
+Use CPython 3.11.x on Windows, macOS, or Linux. For shell-specific instructions,
+see [Windows / PowerShell](docs/WINDOWS.md) or [macOS / Terminal](docs/MACOS.md).
+In the commands below, Windows users can replace `python3` with `python`
+(or `py -3.11` if using the Python Launcher).
+
+### Check the source
 
 Download the source ZIP and extract it. From the extracted repository root
 (the directory containing this README), run:
@@ -35,7 +47,7 @@ The verifier runs the focused unit tests, the deterministic quickstart, and a
 one-repetition numeric check against the reported primary-budget rows. No
 package installation, simulator download, GPU, or external data is needed.
 
-## What is being verified?
+### What is being verified?
 
 The one-command check covers:
 
@@ -45,19 +57,11 @@ The one-command check covers:
 4. the deterministic CPU quickstart and its expected selection;
 5. one deterministic replay of the public outcome tensor.
 
-To recompute the first comparison over 200 paired repetitions at its three
-primary budgets, run:
+The legacy smoke comparison uses a 2% relative tolerance and a `1e-8`
+absolute floor; its PASS is not strict trace or full-paper certification.
+Use the paths below for the complete studies and stricter checks.
 
-```bash
-python3 scripts/reproduce_results.py --full
-```
-
-This existing smoke verifier uses a 2% relative tolerance and a `1e-8`
-absolute floor. Its PASS is not a strict trace or full-paper certification.
-Here `--full` means all repetitions of the first comparison, not all
-experiments in the paper. Use the expanded paths below for stricter checks.
-
-## Reproduce the paper results
+### Reconstruct all reported studies
 
 No simulator or GPU is needed. First recompute summaries and paired intervals
 from the supplied per-repetition evidence:
@@ -72,7 +76,12 @@ and separate 12-environment-seed study. Stored reconstruction is distinguished
 from new execution. The seed command also rebuilds its tensor from original
 raw observations and independently reconstructs the complete original report.
 
-To execute the allocation algorithms again on recorded binary outcomes:
+### Execute the allocation algorithms again
+
+These fresh CPU runs use recorded binary outcomes, not a simulator. The
+[runtime table](docs/REPRODUCTION.md#re-run-the-allocation-algorithms) identifies
+which environment matched each historical study exactly. Try the small run
+in that guide before the complete commands below:
 
 ```bash
 python3 scripts/reproduce_paper.py --mode replay --study mechanism --workers 4 --output rerun/mechanism
@@ -104,6 +113,26 @@ or reference values. This check covers EIG only. See
 For the step-by-step reviewer path, see
 [`docs/ONBOARDING.md`](docs/ONBOARDING.md).
 
+## Stage 2: optionally generate new robot outcomes
+
+Follow the [setup/download helper](simulation/SETUP.md), then the
+[original simulator and scenario guide](simulation/README.md). The helper
+previews commands and changes nothing until `--execute` is added. It provides
+source checkout, separate environments, assets, and public model downloads;
+it does not launch an experiment.
+
+The recorded acquisition setup uses native Windows for simulation/rendering
+and WSL2 Linux with an NVIDIA GPU for policy inference. WSL alone is not a
+supported rendering route. Native Linux + NVIDIA is supported upstream, but
+this release does not claim a new end-to-end validation of that configuration
+or of the new installation recipe. See the
+[official simulator support table](https://maniskill.readthedocs.io/en/latest/user_guide/getting_started/installation.html#system-support).
+
+Keep new observations separate from the paper data. The supplied conversion
+and replay commands compute results from those new observations; they do not
+replace them with the paper's outcomes. A Mac or other CPU machine can analyze
+the new raw results after the GPU machine finishes.
+
 ## Requirements
 
 - CPython 3.11.x; see the study-specific runtime table in [the guide](docs/REPRODUCTION.md)
@@ -126,7 +155,9 @@ examples/
   ranksplit_quickstart.py       deterministic CPU-only example
 tests/                           numerical, scoring, import, and smoke tests
 docs/ONBOARDING.md               reviewer-oriented setup path
+docs/WINDOWS.md, docs/MACOS.md   shell-specific commands within the two stages
 simulation/                      optional original simulator source and inputs
+  setup_simulation.py            preview-first installation/download helper
 ```
 
 The modules support both `scripts.ranksplit` imports from the repository root

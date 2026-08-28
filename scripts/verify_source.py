@@ -18,6 +18,7 @@ TEST_MODULES = (
     "tests.test_paper_reproduction",
     "tests.test_custom_simulation_tensor",
     "tests.test_environment_seed_reproduction",
+    "tests.test_simulation_setup",
 )
 
 

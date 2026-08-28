@@ -6,6 +6,11 @@ policy servers, and scenario inputs so that a reviewer can generate new
 outcomes. It is not necessary to run a simulator to check the paper's numerical
 analysis.
 
+This is optional Stage 2 of the [two-stage guide](../README.md#two-stages-of-reproduction).
+For installation and downloads, use the
+[preview-first setup helper](SETUP.md); the commands below start from an
+already prepared simulator/policy environment.
+
 The five Python files and two scenario files here are byte-for-byte copies of
 the experiment sources, listed in [SOURCE_PROVENANCE.json](SOURCE_PROVENANCE.json).
 The package checks their syntax and scenario consistency. A fresh GPU

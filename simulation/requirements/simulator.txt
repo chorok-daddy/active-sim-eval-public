@@ -1,0 +1,6 @@
+# Versions observed on the experiment machine; not a complete lockfile.
+mani_skill==3.0.1
+sapien==3.0.3
+gymnasium==1.3.0
+torch==2.12.1
+numpy==2.4.6
