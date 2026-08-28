@@ -91,11 +91,28 @@ the reported 200-repetition aggregate metrics at the three primary budgets:
 python3 scripts/reproduce_results.py --full
 ```
 
-The aggregate comparison accepts 2% relative deviation and `1e-8` absolute
-deviation near zero to accommodate ordinary floating-point or stochastic
-variation.
+The existing aggregate smoke comparison accepts 2% relative deviation and
+`1e-8` absolute deviation near zero. This tolerance does not certify identical
+allocation paths. The replay uses fixed seeds, not an unrecorded stochastic
+rerun. Near-tied EIG scores can nevertheless select different trials across
+platform math libraries.
 
-## 6. If something fails
+For a stricter EIG-only comparison of every repetition's metrics and complete
+allocation trace, run `python3 scripts/check_replay_runtime.py --all`.
+The historical Windows CPython 3.11.15 environment matches all 200 EIG traces
+and metric rows. A mismatch on another platform is reported, not silently
+normalized. This does not certify RankSplit's complete traces or the other
+studies. The current `--full` command covers the first comparison only.
+
+## 6. Optional simulator source
+
+The original simulator client, Octo/RT-1-X policy servers, and both scenario
+sets are included under [`simulation/`](../simulation/README.md). This path is
+for generating new robot outcomes with separately installed software and model
+weights. It is not run by `verify_source.py`; its source-only checks do not
+claim a new GPU rollout. Keep new outputs separate from the supplied data.
+
+## 7. If something fails
 
 1. Confirm that the command is being run from the repository root.
 2. Confirm Python 3.11.x with `python3 --version`.
@@ -108,8 +125,9 @@ variation.
 4. Record the Python version, operating system, command, and complete error
    output when reporting an issue.
 
-## 7. License and source use
+## 8. License and source use
 
 The repository source is distributed under the MIT License in the root
-[`LICENSE`](../LICENSE) file. No third-party package or data is bundled in the
-default source path.
+[`LICENSE`](../LICENSE) file. No third-party package, model weights, or
+simulator assets are bundled; the recorded experiment outcomes are supplied
+for the CPU replay.

@@ -1,0 +1,12 @@
+{
+  "description": "Original experiment scripts and scenario files copied without changes; paths in this package are relative to simulation/.",
+  "files": {
+    "interstitial_scenario_contract.py": "064f73c75bad99765645e91e6b72ab883de12704469c627ab96d232098e87d07",
+    "octo-small-policy-server.py": "c8ad0f03272815bdf370ff6ebcfceaf7e6cec04b3e9a0ab6ddc1cc515d3d5800",
+    "rt1-x-policy-server.py": "2d2098a9165dd43ddbbe973aa508c9c11ce8e81aec67225bcdc76e06b7999852",
+    "run-octo-small-policy-episode.py": "4e73ea8a09ca0920aab80ab595cd89f5aa4a3125ae4e40219f665efa8aa25079",
+    "run-policy-family-interstitial-batch.py": "885a360653630aa6c6a118df599eba99b17e57afb85367d1a5c2c16172250ec4",
+    "scenarios/mechanism-comparison.json": "f6a1de48b9da6047e20741f4670646ee3cbceb5768455f56ee54afbd0371874e",
+    "scenarios/ranking-comparison.json": "b03811812168e6647162ca32d3ae6d1c00819f020a165b53254a9003bb2e2a4c"
+  }
+}

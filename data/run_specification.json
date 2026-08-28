@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "seed": 20260725,
+  "policy_order": [
+    "octo-small",
+    "octo-base",
+    "rt-1-x"
+  ],
+  "scenario_count": 272,
+  "initial_observations": 12,
+  "budgets": [
+    48,
+    96,
+    192,
+    408,
+    816
+  ],
+  "primary_budgets": [
+    48,
+    96,
+    192
+  ],
+  "repetitions": 200,
+  "programs": {
+    "conventional_eig": {
+      "mode": "conventional_eig",
+      "preference_lambda": 0.0
+    },
+    "fixed_preference": {
+      "mode": "fixed_preference",
+      "preference_lambda": 0.25
+    },
+    "ranksplit": {
+      "mode": "ranksplit",
+      "preference_lambda": 0.25
+    }
+  }
+}

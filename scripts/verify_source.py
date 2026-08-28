@@ -14,6 +14,7 @@ TEST_MODULES = (
     "tests.test_ranksplit",
     "tests.test_ranksplit_quickstart",
     "tests.test_ranksplit_source_imports",
+    "tests.test_simulation_source",
 )
 
 

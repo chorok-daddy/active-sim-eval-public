@@ -6,14 +6,21 @@ to a verified CPU smoke run in a few minutes.
 
 > The public source release contains the reusable calculation modules, a
 > compact binary-outcome tensor, tests, and reviewer-facing verification
-> commands. It does not contain manuscripts, policy checkpoints, simulator
-> environments, rendered figures, or private workspace paths.
+> commands. Optional original simulator integration source and scenario inputs
+> are provided separately; model weights and simulator environments are not
+> bundled.
+
+To generate new robot outcomes instead of using the supplied data, see
+[`simulation/README.md`](simulation/README.md). This optional GPU path is
+separate from the default CPU reproduction and has not been rerun for this
+source release.
 
 ## Quick start
 
+Download the source ZIP and extract it. From the extracted repository root
+(the directory containing this README), run:
+
 ```bash
-git clone https://github.com/chorok-daddy/active-sim-eval-public.git
-cd active-sim-eval-public
 python3 --version
 python3 scripts/verify_source.py
 ```
@@ -38,15 +45,31 @@ The one-command check covers:
 4. the deterministic CPU quickstart and its expected selection;
 5. one deterministic replay of the public outcome tensor.
 
-The full 200-repetition result check at the three primary budgets is available
-when a reviewer wants the reported aggregate values:
+To recompute the first comparison over 200 paired repetitions at its three
+primary budgets, run:
 
 ```bash
 python3 scripts/reproduce_results.py --full
 ```
 
-The comparison uses a 2% relative tolerance and a `1e-8` absolute floor for
-values close to zero.
+This existing smoke verifier uses a 2% relative tolerance and a `1e-8`
+absolute floor. Its PASS is not a strict trace or full-paper certification.
+The sensitivity study, second ranking-comparator comparison, and environment
+seed study are not yet covered by this command; `--full` means all repetitions
+of the first comparison, not all experiments in the paper.
+
+An independent EIG runtime check compares all five metrics and the full
+allocation trace for each of 200 repetitions:
+
+```bash
+python3 scripts/check_replay_runtime.py --all
+```
+
+This check matched the historical Windows CPython 3.11.15 environment exactly.
+On Mac CPython 3.11.3, near-tied floating-point EIG scores can change individual
+choices; the check reports these differences rather than adjusting the source
+or reference values. This check covers EIG only. See
+[`docs/RELEASE_NOTES.md`](docs/RELEASE_NOTES.md) for the release scope.
 
 For the step-by-step reviewer path, see
 [`docs/ONBOARDING.md`](docs/ONBOARDING.md).
@@ -64,6 +87,7 @@ scripts/
   fixed_preference.py           exact Beta--Bernoulli calculations
   ranksplit.py                  clarity-adaptive RankSplit score
   reproduce_results.py          tensor replay and result check
+  check_replay_runtime.py        EIG per-repetition metrics and trace check
   verify_source.py              one-command verifier
 data/
   confirmation_tensor.json      compact public binary outcomes
@@ -72,6 +96,7 @@ examples/
   ranksplit_quickstart.py       deterministic CPU-only example
 tests/                           numerical, scoring, import, and smoke tests
 docs/ONBOARDING.md               reviewer-oriented setup path
+simulation/                      optional original simulator source and inputs
 ```
 
 The modules support both `scripts.ranksplit` imports from the repository root
